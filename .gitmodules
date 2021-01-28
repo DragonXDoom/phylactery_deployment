@@ -1,0 +1,3 @@
+[submodule "phylactery"]
+	path = phylactery
+	url = https://github.com/dragonxdoom/phylactery
