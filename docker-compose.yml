@@ -31,6 +31,7 @@ services:
       - postgres_password
     volumes:
       - ./local_settings.py:/app/phylactery/local_settings.py
+      - ${MEDIA_PERSISTENT_ROOT}:/app/media
     restart: always
 
   postgres:
