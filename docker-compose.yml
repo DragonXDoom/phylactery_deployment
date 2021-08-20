@@ -48,6 +48,25 @@ services:
     volumes:
       - ${DATABASE_PERSISTENT_ROOT}:/var/lib/postgresql/data
     restart: always
+   
+  redis:
+    container_name: phylactery-redis
+    image: redis:alpine
+    networks:
+      - backend
+      
+  celery-worker:
+    container_name: phylactery-celery-worker
+    command: celery -A phylactery worker -l info
+    networks:
+      - backend
+  
+  celery-beat:
+    container_name: phylactery-celery-beat
+    command: celery -A phylactery beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    networks:
+      - backend
+
 
 networks:
   proxy:
