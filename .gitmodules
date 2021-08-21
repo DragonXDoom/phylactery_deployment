@@ -1,3 +1,8 @@
 [submodule "phylactery"]
 	path = phylactery
 	url = https://github.com/dragonxdoom/phylactery
+	branch = master
+[submodule "phylactery_development"]
+	path = phylactery_development
+	url = https://github.com/dragonxdoom/phylactery
+	branch = development
