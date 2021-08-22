@@ -1,30 +1,30 @@
 version: '3.1'
 
 services:
-  phylactery:
-    container_name: phylactery
+  phylactery-dev:
+    container_name: phylactery-dev
     build: ./phylactery
     depends_on:
-      - postgres
+      - postgres-dev
     networks:
       - proxy
-      - backend
+      - backend-dev
     labels:
       # Traefik
       - traefik.enable=true
       - traefik.docker.network=proxy
       # Redirect http to https
-      - traefik.http.middlewares.phylactery-redirect-websecure.redirectscheme.scheme=https
-      - traefik.http.routers.phylactery-web.middlewares=phylactery-redirect-websecure
-      - traefik.http.routers.phylactery-web.rule=Host("phylactery.gozz.id.au") || Host("unigames.asn.au")
-      - traefik.http.routers.phylactery-web.entrypoints=web
+      - traefik.http.middlewares.phylactery-dev-redirect-websecure.redirectscheme.scheme=https
+      - traefik.http.routers.phylactery-dev-web.middlewares=phylactery-redirect-websecure
+      - traefik.http.routers.phylactery-dev-web.rule=Host("dev.phylactery.gozz.id.au") || Host("dev.unigames.asn.au")
+      - traefik.http.routers.phylactery-dev-web.entrypoints=web
       # Accept https with letsencrypt
-      - traefik.http.routers.phylactery-websecure.rule=Host("phylactery.gozz.id.au") || Host("unigames.asn.au")
-      - traefik.http.routers.phylactery-websecure.tls.certresolver=letsencrypt
-      - traefik.http.routers.phylactery-websecure.tls=true
-      - traefik.http.routers.phylactery-websecure.entrypoints=websecure
+      - traefik.http.routers.phylactery-dev-websecure.rule=Host("dev.phylactery.gozz.id.au") || Host("dev.unigames.asn.au")
+      - traefik.http.routers.phylactery-dev-websecure.tls.certresolver=letsencrypt
+      - traefik.http.routers.phylactery-dev-websecure.tls=true
+      - traefik.http.routers.phylactery-dev-websecure.entrypoints=websecure
       # Port
-      - traefik.http.services.phylactery-websecure.loadbalancer.server.port=80
+      - traefik.http.services.phylactery-dev-websecure.loadbalancer.server.port=80
     secrets:
       - django_secret_key
       - email_password
@@ -34,11 +34,11 @@ services:
       - ${MEDIA_PERSISTENT_ROOT}:/app/media
     restart: always
 
-  postgres:
-    container_name: phylactery-postgres
+  postgres-dev:
+    container_name: phylactery-postgres-dev
     image: postgres:latest
     networks:
-      - backend
+      - backend-dev
     environment:
       POSTGRES_DB: phylactery
       POSTGRES_USER: phylactery
@@ -48,30 +48,11 @@ services:
     volumes:
       - ${DATABASE_PERSISTENT_ROOT}:/var/lib/postgresql/data
     restart: always
-   
-  redis:
-    container_name: phylactery-redis
-    image: redis:alpine
-    networks:
-      - backend
-      
-  celery-worker:
-    container_name: phylactery-celery-worker
-    command: celery -A phylactery worker -l info
-    networks:
-      - backend
-  
-  celery-beat:
-    container_name: phylactery-celery-beat
-    command: celery -A phylactery beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    networks:
-      - backend
-
 
 networks:
   proxy:
     external: true
-  backend:
+  backend-dev:
 
 secrets:
   django_secret_key:
