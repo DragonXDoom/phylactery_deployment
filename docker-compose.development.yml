@@ -15,7 +15,7 @@ services:
       - traefik.docker.network=proxy
       # Redirect http to https
       - traefik.http.middlewares.phylactery-dev-redirect-websecure.redirectscheme.scheme=https
-      - traefik.http.routers.phylactery-dev-web.middlewares=phylactery-redirect-websecure
+      - traefik.http.routers.phylactery-dev-web.middlewares=phylactery-dev-redirect-websecure
       - traefik.http.routers.phylactery-dev-web.rule=Host("dev.phylactery.gozz.id.au") || Host("dev.unigames.asn.au")
       - traefik.http.routers.phylactery-dev-web.entrypoints=web
       # Accept https with letsencrypt
