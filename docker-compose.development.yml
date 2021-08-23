@@ -1,14 +1,16 @@
 version: '3.1'
 
 services:
-  phylactery-dev:
+  phylactery:
     container_name: phylactery-dev
     build: ./phylactery
     depends_on:
-      - postgres-dev
+      - postgres
     networks:
       - proxy
       - backend-dev
+    env-file:
+      - development.env
     labels:
       # Traefik
       - traefik.enable=true
@@ -34,11 +36,13 @@ services:
       - ${MEDIA_PERSISTENT_ROOT}:/app/media
     restart: always
 
-  postgres-dev:
+  postgres:
     container_name: phylactery-postgres-dev
     image: postgres:latest
     networks:
       - backend-dev
+    env-file:
+      - development.env
     environment:
       POSTGRES_DB: phylactery
       POSTGRES_USER: phylactery

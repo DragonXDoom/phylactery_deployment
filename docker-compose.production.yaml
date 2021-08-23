@@ -2,29 +2,31 @@ version: '3.1'
 
 services:
   phylactery:
-    container_name: phylactery
+    container_name: phylactery-prod
     build: ./phylactery
     depends_on:
       - postgres
     networks:
       - proxy
-      - backend
+      - backend-prod
+    env-file:
+      - production.env
     labels:
       # Traefik
       - traefik.enable=true
       - traefik.docker.network=proxy
       # Redirect http to https
-      - traefik.http.middlewares.phylactery-redirect-websecure.redirectscheme.scheme=https
-      - traefik.http.routers.phylactery-web.middlewares=phylactery-redirect-websecure
-      - traefik.http.routers.phylactery-web.rule=Host("phylactery.gozz.id.au") || Host("unigames.asn.au")
-      - traefik.http.routers.phylactery-web.entrypoints=web
+      - traefik.http.middlewares.phylactery-prod-redirect-websecure.redirectscheme.scheme=https
+      - traefik.http.routers.phylactery-prod-web.middlewares=phylactery-prod-redirect-websecure
+      - traefik.http.routers.phylactery-prod-web.rule=Host("phylactery.gozz.id.au") || Host("unigames.asn.au")
+      - traefik.http.routers.phylactery-prod-web.entrypoints=web
       # Accept https with letsencrypt
-      - traefik.http.routers.phylactery-websecure.rule=Host("phylactery.gozz.id.au") || Host("unigames.asn.au")
-      - traefik.http.routers.phylactery-websecure.tls.certresolver=letsencrypt
-      - traefik.http.routers.phylactery-websecure.tls=true
-      - traefik.http.routers.phylactery-websecure.entrypoints=websecure
+      - traefik.http.routers.phylactery-prod-websecure.rule=Host("phylactery.gozz.id.au") || Host("unigames.asn.au")
+      - traefik.http.routers.phylactery-prod-websecure.tls.certresolver=letsencrypt
+      - traefik.http.routers.phylactery-prod-websecure.tls=true
+      - traefik.http.routers.phylactery-prod-websecure.entrypoints=websecure
       # Port
-      - traefik.http.services.phylactery-websecure.loadbalancer.server.port=80
+      - traefik.http.services.phylactery-prod-websecure.loadbalancer.server.port=80
     secrets:
       - django_secret_key
       - email_password
@@ -35,10 +37,12 @@ services:
     restart: always
 
   postgres:
-    container_name: phylactery-postgres
+    container_name: phylactery-postgres-prod
     image: postgres:latest
     networks:
-      - backend
+      - backend-prod
+    env-file:
+      - production.env
     environment:
       POSTGRES_DB: phylactery
       POSTGRES_USER: phylactery
@@ -52,7 +56,7 @@ services:
 networks:
   proxy:
     external: true
-  backend:
+  backend-prod:
 
 secrets:
   django_secret_key:
