@@ -30,7 +30,7 @@ DATABASES = {
         'NAME': 'phylactery',
         'USER': 'phylactery',
         'PASSWORD': get_docker_secret('postgres_password'),
-        'HOST': 'postgres',
+        'HOST': 'postgres-dev',
         'PORT': '5432',
     }
 }

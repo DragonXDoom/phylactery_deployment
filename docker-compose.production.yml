@@ -1,16 +1,14 @@
 version: '3.1'
 
 services:
-  phylactery:
+  phylactery-prod:
     container_name: phylactery-prod
     build: ./phylactery
     depends_on:
-      - postgres
+      - postgres-prod
     networks:
       - proxy
       - backend-prod
-    env_file:
-      - ./production.env
     labels:
       # Traefik
       - traefik.enable=true
@@ -32,17 +30,15 @@ services:
       - email_password
       - postgres_password
     volumes:
-      - ./local_settings.py:/app/phylactery/local_settings.py
-      - ${MEDIA_PERSISTENT_ROOT}:/app/media
+      - ./local_settings.production.py:/app/phylactery/local_settings.py
+      - /mnt/persistent/phylactery/media/:/app/media
     restart: always
 
-  postgres:
+  postgres-prod:
     container_name: phylactery-postgres-prod
     image: postgres:latest
     networks:
       - backend-prod
-    env_file:
-      - ./production.env
     environment:
       POSTGRES_DB: phylactery
       POSTGRES_USER: phylactery
@@ -50,7 +46,7 @@ services:
     secrets:
       - postgres_password
     volumes:
-      - ${DATABASE_PERSISTENT_ROOT}:/var/lib/postgresql/data
+      - /mnt/persistent/phylactery/database/:/var/lib/postgresql/data
     restart: always
 
 networks:
