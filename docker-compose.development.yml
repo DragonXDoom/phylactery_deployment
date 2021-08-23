@@ -9,7 +9,7 @@ services:
     networks:
       - proxy
       - backend-dev
-    env-file:
+    env_file:
       - development.env
     labels:
       # Traefik
@@ -41,7 +41,7 @@ services:
     image: postgres:latest
     networks:
       - backend-dev
-    env-file:
+    env_file:
       - development.env
     environment:
       POSTGRES_DB: phylactery
