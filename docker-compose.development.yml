@@ -10,7 +10,7 @@ services:
       - proxy
       - backend-dev
     env_file:
-      - development.env
+      - ./development.env
     labels:
       # Traefik
       - traefik.enable=true
@@ -42,7 +42,7 @@ services:
     networks:
       - backend-dev
     env_file:
-      - development.env
+      - ./development.env
     environment:
       POSTGRES_DB: phylactery
       POSTGRES_USER: phylactery
