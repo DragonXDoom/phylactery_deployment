@@ -56,7 +56,6 @@ services:
       - backend-dev
   
   celery-worker-dev:
-    contaner_name: phylactery-celery-worker-dev
     build: ./phylactery
     command: celery -A phylactery worker -l info
     depends_on:
@@ -64,7 +63,7 @@ services:
       - postgres-dev
       - redis-dev
     environment:
-      - DB_HOST: postgres-dev
+      - DB_HOST: "postgres-dev"
       - DB_NAME: phylactery
       - DB_USER: phylactery
       - DB_PASS: /run/secrets/postgres_password
@@ -72,7 +71,6 @@ services:
       - postgres_password
 
   celery-beat-dev:
-    contaner_name: phylactery-celery-worker-dev
     build: ./phylactery
     command: celery -A phylactery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     depends_on:
@@ -80,7 +78,7 @@ services:
       - postgres-dev
       - redis-dev
     environment:
-      - DB_HOST: postgres-dev
+      - DB_HOST: "postgres-dev"
       - DB_NAME: phylactery
       - DB_USER: phylactery
       - DB_PASS: /run/secrets/postgres_password
