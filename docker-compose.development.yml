@@ -63,10 +63,10 @@ services:
       - postgres-dev
       - redis-dev
     environment:
-      - DB_HOST: "postgres-dev"
-      - DB_NAME: phylactery
-      - DB_USER: phylactery
-      - DB_PASS: /run/secrets/postgres_password
+      - DB_HOST=postgres-dev"
+      - DB_NAME=phylactery
+      - DB_USER=phylactery
+      - DB_PASS=/run/secrets/postgres_password
     secrets:
       - postgres_password
 
@@ -78,10 +78,10 @@ services:
       - postgres-dev
       - redis-dev
     environment:
-      - DB_HOST: "postgres-dev"
-      - DB_NAME: phylactery
-      - DB_USER: phylactery
-      - DB_PASS: /run/secrets/postgres_password
+      - DB_HOST=postgres-dev
+      - DB_NAME=phylactery
+      - DB_USER=phylactery
+      - DB_PASS=/run/secrets/postgres_password
     secrets:
       - postgres_password
 
