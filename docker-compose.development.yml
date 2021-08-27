@@ -48,6 +48,44 @@ services:
     volumes:
       - /mnt/persistent/phylactery-dev/database/:/var/lib/postgresql/data
     restart: always
+    
+  redis-dev:
+    container_name: phylactery-redis-dev
+    image: redis:alpine
+    networks:
+      - backend-dev
+  
+  celery-worker-dev:
+    contaner_name: phylactery-celery-worker-dev
+    build: ./phylactery
+    command: celery -A phylactery worker -l info
+    depends_on:
+      - phylactery-dev
+      - postgres-dev
+      - redis-dev
+    environment:
+      - DB_HOST: postgres-dev
+      - DB_NAME: phylactery
+      - DB_USER: phylactery
+      - DB_PASS: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+
+  celery-beat-dev:
+    contaner_name: phylactery-celery-worker-dev
+    build: ./phylactery
+    command: celery -A phylactery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    depends_on:
+      - phylactery-dev
+      - postgres-dev
+      - redis-dev
+    environment:
+      - DB_HOST: postgres-dev
+      - DB_NAME: phylactery
+      - DB_USER: phylactery
+      - DB_PASS: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
 
 networks:
   proxy:
