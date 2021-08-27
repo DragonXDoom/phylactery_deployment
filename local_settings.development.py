@@ -62,3 +62,11 @@ EMAIL_HOST_USER = 'donald@sutherland.id.au'
 EMAIL_HOST_PASSWORD = get_docker_secret('email_password')
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'donald@sutherland.id.au'
+
+# Celery Stuff
+BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Australia/Perth'
