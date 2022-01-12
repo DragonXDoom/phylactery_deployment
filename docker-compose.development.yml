@@ -6,6 +6,7 @@ services:
     build: ./phylactery
     depends_on:
       - postgres-dev
+      - redis-dev
     networks:
       - proxy
       - backend-dev
@@ -39,10 +40,8 @@ services:
     image: postgres:latest
     networks:
       - backend-dev
-    environment:
-      POSTGRES_DB: phylactery
-      POSTGRES_USER: phylactery
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    env_file:
+      - ./development.env
     secrets:
       - postgres_password
     volumes:
@@ -57,35 +56,37 @@ services:
   
   celery-worker-dev:
     build: ./phylactery
-    command: celery -A phylactery worker -l info
+    command: celery --app=phylactery.celery_app:app worker -l INFO
     depends_on:
       - phylactery-dev
       - postgres-dev
       - redis-dev
-    environment:
-      - DB_HOST=postgres-dev"
-      - DB_NAME=phylactery
-      - DB_USER=phylactery
-      - DB_PASS=/run/secrets/postgres_password
+    env_file:
+      - ./development.env
     secrets:
+      - django_secret_key
+      - email_password
       - postgres_password
+    volumes:
+      - ./local_settings.development.py:/app/phylactery/local_settings.py
     networks:
       - backend-dev
 
   celery-beat-dev:
     build: ./phylactery
-    command: celery -A phylactery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: celery --app=phylactery.celery_app:app beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
     depends_on:
       - phylactery-dev
       - postgres-dev
       - redis-dev
-    environment:
-      - DB_HOST=postgres-dev
-      - DB_NAME=phylactery
-      - DB_USER=phylactery
-      - DB_PASS=/run/secrets/postgres_password
+    env_file:
+      - ./development.env
     secrets:
+      - django_secret_key
+      - email_password
       - postgres_password
+    volumes:
+      - ./local_settings.development.py:/app/phylactery/local_settings.py
     networks:
       - backend-dev
 

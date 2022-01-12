@@ -13,10 +13,10 @@ from get_docker_secret import get_docker_secret
 # SECURITY WARNING: keep the secret key used in production secret!
 # You may use <http://www.miniwebtool.com/django-secret-key-generator/>
 # to generate this key.
-SECRET_KEY = get_docker_secret('django_secret_key')
+SECRET_KEY = get_docker_secret('django_secret_key', safe=False)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # Change to False once you are done with runserver testing.
+DEBUG = True  # Change to False once you are done with runserver testing.
 
 # Uncomment and set to the domain names this site is intended to serve.
 # You must do this once you set DEBUG to False.
@@ -29,7 +29,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'phylactery',
         'USER': 'phylactery',
-        'PASSWORD': get_docker_secret('postgres_password'),
+        'PASSWORD': get_docker_secret('postgres_password', safe=False),
         'HOST': 'postgres-dev',
         'PORT': '5432',
     }
@@ -59,13 +59,13 @@ STATICFILES_FINDERS = [
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'donald@sutherland.id.au'
-EMAIL_HOST_PASSWORD = get_docker_secret('email_password')
+EMAIL_HOST_PASSWORD = get_docker_secret('email_password', safe=False)
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'donald@sutherland.id.au'
 
 # Celery Stuff
-BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+BROKER_URL = 'redis://redis-dev:6379'
+CELERY_RESULT_BACKEND = 'redis://redis-dev:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
