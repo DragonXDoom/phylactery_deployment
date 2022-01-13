@@ -64,7 +64,7 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'donald@sutherland.id.au'
 
 # Celery Stuff
-BROKER_URL = 'redis://redis-dev:6379'
+CELERY_BROKER_URL = 'redis://redis-dev:6379'
 CELERY_RESULT_BACKEND = 'redis://redis-dev:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
