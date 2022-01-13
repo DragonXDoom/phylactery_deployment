@@ -1,0 +1,63 @@
+version: '3.1'
+
+services:
+  phylactery-prod:
+    container_name: phylactery-prod
+    build: ./phylactery
+    depends_on:
+      - postgres-prod
+    networks:
+      - proxy
+      - backend-prod
+    labels:
+      # Traefik
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      # Redirect http to https
+      - traefik.http.middlewares.phylactery-prod-redirect-websecure.redirectscheme.scheme=https
+      - traefik.http.routers.phylactery-prod-web.middlewares=phylactery-prod-redirect-websecure
+      - traefik.http.routers.phylactery-prod-web.rule=Host("phylactery.gozz.id.au") || Host("unigames.asn.au")
+      - traefik.http.routers.phylactery-prod-web.entrypoints=web
+      # Accept https with letsencrypt
+      - traefik.http.routers.phylactery-prod-websecure.rule=Host("phylactery.gozz.id.au") || Host("unigames.asn.au")
+      - traefik.http.routers.phylactery-prod-websecure.tls.certresolver=letsencrypt
+      - traefik.http.routers.phylactery-prod-websecure.tls=true
+      - traefik.http.routers.phylactery-prod-websecure.entrypoints=websecure
+      # Port
+      - traefik.http.services.phylactery-prod-websecure.loadbalancer.server.port=80
+    secrets:
+      - django_secret_key
+      - email_password
+      - postgres_password
+    volumes:
+      - ./local_settings.production.py:/app/phylactery/local_settings.py
+      - /mnt/persistent/phylactery/media/:/app/media
+    restart: always
+
+  postgres-prod:
+    container_name: phylactery-postgres-prod
+    image: postgres:latest
+    networks:
+      - backend-prod
+    environment:
+      POSTGRES_DB: phylactery
+      POSTGRES_USER: phylactery
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - /mnt/persistent/phylactery/database/:/var/lib/postgresql/data
+    restart: always
+
+networks:
+  proxy:
+    external: true
+  backend-prod:
+
+secrets:
+  django_secret_key:
+    file: secrets/django_secret_key
+  email_password:
+    file: secrets/email_password
+  postgres_password:
+    file: secrets/postgres_password
