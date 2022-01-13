@@ -58,10 +58,10 @@ STATICFILES_FINDERS = [
 # Email Settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'donald@sutherland.id.au'
+EMAIL_HOST_USER = 'uwaunigames@gmail.com'
 EMAIL_HOST_PASSWORD = get_docker_secret('email_password', safe=False)
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'donald@sutherland.id.au'
+DEFAULT_FROM_EMAIL = 'uwaunigames@gmail.com'
 
 # Celery Stuff
 CELERY_BROKER_URL = 'redis://redis-dev:6379'
