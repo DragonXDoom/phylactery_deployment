@@ -29,7 +29,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'phylactery',
         'USER': 'phylactery',
-        'PASSWORD': get_docker_secret('postgres_password'),
+        'PASSWORD': get_docker_secret('postgres_password', safe=False),
         'HOST': 'postgres-prod',
         'PORT': '5432',
     }
@@ -58,7 +58,16 @@ STATICFILES_FINDERS = [
 # Email Settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'donald@sutherland.id.au'
-EMAIL_HOST_PASSWORD = get_docker_secret('email_password')
+EMAIL_HOST_USER = 'uwaunigames@gmail.com'
+EMAIL_HOST_PASSWORD = get_docker_secret('email_password', safe=False)
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'donald@sutherland.id.au'
+DEFAULT_FROM_EMAIL = 'uwaunigames@gmail.com'
+
+# Celery Stuff
+CELERY_BROKER_URL = 'redis://redis-prod:6379'
+CELERY_RESULT_BACKEND = 'redis://redis-prod:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Australia/Perth'
+BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
