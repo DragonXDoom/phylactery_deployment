@@ -6,6 +6,7 @@ services:
     build: ./phylactery
     depends_on:
       - postgres-prod
+      - redis-prod
     networks:
       - proxy
       - backend-prod
@@ -39,15 +40,55 @@ services:
     image: postgres:latest
     networks:
       - backend-prod
-    environment:
-      POSTGRES_DB: phylactery
-      POSTGRES_USER: phylactery
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    env_file:
+      - ./production.env
     secrets:
       - postgres_password
     volumes:
       - /mnt/persistent/phylactery/database/:/var/lib/postgresql/data
     restart: always
+
+  redis-prod:
+    container_name: phylactery-redis-prod
+    image: redis:alpine
+    networks:
+      - backend-prod
+
+  celery-worker-prod:
+    build: ./phylactery
+    command: celery --app=phylactery.celery_app:app worker -l INFO
+    depends_on:
+      - phylactery-prod
+      - postgres-prod
+      - redis-prod
+    env_file:
+      - ./production.env
+    secrets:
+      - django_secret_key
+      - email_password
+      - postgres_password
+    volumes:
+      - ./local_settings.production.py:/app/phylactery/local_settings.py
+    networks:
+      - backend-prod
+
+  celery-beat-prod:
+    build: ./phylactery
+    command: celery --app=phylactery.celery_app:app beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    depends_on:
+      - phylactery-prod
+      - postgres-prod
+      - redis-prod
+    env_file:
+      - ./production.env
+    secrets:
+      - django_secret_key
+      - email_password
+      - postgres_password
+    volumes:
+      - ./local_settings.production.py:/app/phylactery/local_settings.py
+    networks:
+      - backend-prod
 
 networks:
   proxy:
