@@ -110,3 +110,7 @@ secrets:
     file: secrets/email_password
   postgres_password:
     file: secrets/postgres_password
+  discord_bot_guilds:
+    file: secrets/discord_bot_guilds
+  discord_bot_secret:
+    file: secrets/discord_bot_secret
