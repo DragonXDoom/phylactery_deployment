@@ -2,3 +2,6 @@
 	path = phylactery
 	url = https://github.com/dragonxdoom/phylactery
 	branch = development
+[submodule "lich"]
+	path = lich
+	url = https://github.com/DragonXDoom/lich
