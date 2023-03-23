@@ -90,6 +90,14 @@ services:
     networks:
       - backend-dev
 
+  lich-dev:
+    build: ./lich
+    secrets:
+      - discord_bot_guilds
+      - discord_bot_secret
+    networks:
+      - proxy
+
 networks:
   proxy:
     external: true
