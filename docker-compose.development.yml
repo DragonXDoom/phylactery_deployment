@@ -92,11 +92,14 @@ services:
 
   lich-dev:
     build: ./lich
+    depends_on:
+      - phylactery-dev
     secrets:
       - discord_bot_guilds
       - discord_bot_secret
     networks:
       - proxy
+      - backend-dev
 
 networks:
   proxy:
