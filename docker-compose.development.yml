@@ -94,6 +94,8 @@ services:
     build: ./lich
     depends_on:
       - phylactery-dev
+    env_file:
+      - ./development.env
     secrets:
       - discord_bot_guilds
       - discord_bot_secret
