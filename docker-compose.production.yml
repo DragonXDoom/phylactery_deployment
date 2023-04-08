@@ -95,7 +95,7 @@ services:
     depends_on:
       - phylactery-prod
     env_file:
-      - ./development.env
+      - ./production.env
     secrets:
       - discord_bot_guilds
       - discord_bot_secret
