@@ -90,6 +90,19 @@ services:
     networks:
       - backend-prod
 
+  lich-prod:
+    build: ./lich
+    depends_on:
+      - phylactery-prod
+    env_file:
+      - ./development.env
+    secrets:
+      - discord_bot_guilds
+      - discord_bot_secret
+    networks:
+      - proxy
+      - backend-prod
+
 networks:
   proxy:
     external: true
