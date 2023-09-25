@@ -28,7 +28,7 @@ services:
       - traefik.http.services.phylactery-prod-websecure.loadbalancer.server.port=80
     secrets:
       - django_secret_key
-      - email_password
+      - ucc_email_password
       - postgres_password
     volumes:
       - ./local_settings.production.py:/app/phylactery/local_settings.py
@@ -65,7 +65,7 @@ services:
       - ./production.env
     secrets:
       - django_secret_key
-      - email_password
+      - ucc_email_password
       - postgres_password
     volumes:
       - ./local_settings.production.py:/app/phylactery/local_settings.py
@@ -83,7 +83,7 @@ services:
       - ./production.env
     secrets:
       - django_secret_key
-      - email_password
+      - ucc_email_password
       - postgres_password
     volumes:
       - ./local_settings.production.py:/app/phylactery/local_settings.py
@@ -119,3 +119,5 @@ secrets:
     file: secrets/discord_bot_guilds
   discord_bot_secret:
     file: secrets/discord_bot_secret
+  ucc_email_password:
+    file: secrets/ucc_email_password

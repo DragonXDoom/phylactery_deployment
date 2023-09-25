@@ -30,6 +30,7 @@ services:
       - django_secret_key
       - email_password
       - postgres_password
+      - ucc_email_password
     volumes:
       - ./local_settings.development.py:/app/phylactery/local_settings.py
       - /mnt/persistent/phylactery-dev/media/:/app/media
@@ -67,6 +68,7 @@ services:
       - django_secret_key
       - email_password
       - postgres_password
+      - ucc_email_password
     volumes:
       - ./local_settings.development.py:/app/phylactery/local_settings.py
     networks:
@@ -85,6 +87,7 @@ services:
       - django_secret_key
       - email_password
       - postgres_password
+      - ucc_email_password
     volumes:
       - ./local_settings.development.py:/app/phylactery/local_settings.py
     networks:
@@ -119,3 +122,5 @@ secrets:
     file: secrets/discord_bot_guilds
   discord_bot_secret:
     file: secrets/discord_bot_secret
+  ucc_email_password:
+    file: secrets/ucc_email_password

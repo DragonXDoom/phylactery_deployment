@@ -57,11 +57,11 @@ STATICFILES_FINDERS = [
 
 # Email Settings
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'uwaunigames@gmail.com'
-EMAIL_HOST_PASSWORD = get_docker_secret('email_password', safe=False)
+EMAIL_HOST = 'submission.ucc.asn.au'
+EMAIL_HOST_USER = 'unigames'
+EMAIL_HOST_PASSWORD = get_docker_secret('ucc_email_password', safe=False)
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'uwaunigames@gmail.com'
+DEFAULT_FROM_EMAIL = 'unigames@ucc.asn.au'
 
 # Celery Stuff
 CELERY_BROKER_URL = 'redis://redis-prod:6379'
