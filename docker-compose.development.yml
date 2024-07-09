@@ -54,6 +54,7 @@ services:
     image: redis:alpine
     networks:
       - backend-dev
+    restart: always
   
   celery-worker-dev:
     build: ./phylactery
@@ -73,6 +74,7 @@ services:
       - ./local_settings.development.py:/app/phylactery/local_settings.py
     networks:
       - backend-dev
+    restart: always
 
   celery-beat-dev:
     build: ./phylactery
@@ -92,6 +94,7 @@ services:
       - ./local_settings.development.py:/app/phylactery/local_settings.py
     networks:
       - backend-dev
+    restart: always
 
   lich-dev:
     build: ./lich
@@ -105,6 +108,7 @@ services:
     networks:
       - proxy
       - backend-dev
+    restart: always
 
 networks:
   proxy:
